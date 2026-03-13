@@ -1,6 +1,8 @@
 # Maven
 target/
 !.mvn/wrapper/maven-wrapper.jar
+# keep wrapper
+!.mvn/wrapper/maven-wrapper.properties
 
 # Logs
 *.log
