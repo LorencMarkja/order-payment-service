@@ -126,6 +126,8 @@ public class OrderService {
         payment.setPaidAt(LocalDateTime.now());
         paymentRepository.save(payment);
 
+        order.setPayment(payment);
+
         order.setStatus(OrderStatus.PAID);
 
         return toResponse(order);
@@ -134,11 +136,17 @@ public class OrderService {
     @Transactional
     public OrderResponse cancelOrder(Long orderId) {
 
-        Order order = orderRepository.findByIdWithDetails(orderId).orElseThrow(() -> new NotFoundException("Order not found: " + orderId));
+        Order order = orderRepository.findByIdWithDetails(orderId)
+                .orElseThrow(() -> new NotFoundException("Order not found: " + orderId));
+
+        if (order.isPaid()) {
+            throw new ConflictException("Cannot cancel a paid order: " + orderId);
+        }
 
         if (order.getStatus() == OrderStatus.CANCELED) {
             throw new ConflictException("Order is already canceled: " + orderId);
         }
+
         if (paymentRepository.existsByOrderId(orderId)) {
             throw new ConflictException("Cannot cancel an order with an existing payment: " + orderId);
         }

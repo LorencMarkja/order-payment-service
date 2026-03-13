@@ -174,12 +174,12 @@ class OrderServiceTest {
 
     @Test
     void createOrder_inactiveArticle_throwsNotFound() {
+
         Customer customer = new Customer();
         customer.setName("Test");
         customer.setEmail("test@test.com");
 
         when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
-        when(orderRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
         when(articleItemRepository.findByIdAndActiveTrue(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> orderService.createOrder(
