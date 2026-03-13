@@ -1,6 +1,6 @@
 # Order & Payment Service
 
-Un microservizio REST per la gestione di ordini e pagamenti, costruito con **Java 21** e **Spring Boot 4.3**.
+Un microservizio REST per la gestione di ordini e pagamenti, costruito con **Java 21** e **Spring Boot 4.0.3**.
 
 Il requisito principale è l'**integrità transazionale**: l'aggiornamento dello stato dell'ordine e l'inserimento del pagamento avvengono in modo atomico, con rollback completo in caso di errore.
 
