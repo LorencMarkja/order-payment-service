@@ -1,0 +1,187 @@
+{
+  "info": {
+    "name": "Order Payment Service API",
+    "_postman_id": "c8c5f6c2-7e2e-4c9b-9c3b-9e7f5c5a1234",
+    "description": "Collection Postman per testare tutti gli endpoint REST del servizio Order & Payment. \n\nQuesta collection consente di verificare i principali flussi applicativi:\n- creazione dei clienti\n- creazione degli ordini con più righe\n- calcolo automatico del totale dell’ordine\n- registrazione del pagamento di un ordine\n- cancellazione di un ordine\n- ricerca degli ordini tramite filtri\n\nSono inclusi anche alcuni casi di errore per verificare il rispetto delle regole di business, come il doppio pagamento o l’importo del pagamento non coerente con il totale dell’ordine.\n\nBase URL: http://localhost:8080",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Customers",
+      "description": "Endpoint per la gestione dei clienti.",
+      "item": [
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mario Rossi\",\n  \"email\": \"mario.rossi@test.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            }
+          }
+        },
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            }
+          }
+        },
+        {
+          "name": "Get Customer By Id",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/customers/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "description": "Endpoint per la creazione e il recupero degli ordini.",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"items\": [\n    { \"articleItemId\": 1, \"quantity\": 1 },\n    { \"articleItemId\": 2, \"quantity\": 2 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        },
+        {
+          "name": "Get Order By Id",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/orders/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "description": "Endpoint per registrare il pagamento di un ordine.",
+      "item": [
+        {
+          "name": "Pay Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 1359.97,\n  \"method\": \"CREDIT_CARD\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/1/pay",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "1", "pay"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cancel Order",
+      "description": "Endpoint per cancellare un ordine se non è stato pagato.",
+      "item": [
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/orders/2/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "2", "cancel"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Queries",
+      "description": "Endpoint per la ricerca degli ordini tramite filtri.",
+      "item": [
+        {
+          "name": "Orders by Customer",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/orders?customerId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Orders by Status",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/orders?status=PAID",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PAID"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
